@@ -83,7 +83,7 @@ namespace ControlSum
             
         }
 
-        private static void PrintArr(BitArray bitArray)
+        public static void PrintArr(BitArray bitArray)
         {
             {
                 foreach (var bit in bitArray)
@@ -115,6 +115,7 @@ namespace ControlSum
             GetMsgfromFile(false);
             Console.WriteLine("Полином в двоичном виде:");
             PrintArr(ClassCRC.polynom);
+            Console.WriteLine("Контрольная сумма:");
             PrintArr(ClassCRC.register);
         }
     }
