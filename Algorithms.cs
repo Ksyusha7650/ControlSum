@@ -13,9 +13,8 @@ namespace ConsoleApp1
     {
         const int DEGREE = 30;
         public static BitArray bitArrayCRC,
-            register = new BitArray(DEGREE), polynom = new BitArray(DEGREE), toXorPolynom;
+            register = new BitArray(DEGREE), polynom = new BitArray(DEGREE), toXorPolynom = new BitArray(DEGREE);
         private const uint polynomHex = 0x2030B9C7, registerHex = 0x3FFFFFFF, toXorPolynomHex = 0x3FFFFFFF;
-        public static byte[] data, bytesPolynom;
         public static BitArray bitArray;
         static int[] sumVertical;
 
@@ -45,10 +44,16 @@ namespace ConsoleApp1
             }
         }
 
-        public static void MakeCRC(BitArray bits)
+        public static void MakeCRC(byte[] bytes)
         {
-            bitArray = bits;
+            bitArray = new BitArray(bytes);
             SetSizeToBitArray();
+            BitArray temp = new BitArray(bytes);
+            Reverse(temp);
+            temp.Length = DEGREE;
+            register = register.Xor(temp);
+            bitArrayCRC.RightShift(DEGREE);
+            bitArrayCRC.Length -= DEGREE;
             foreach (var bit in bitArrayCRC)
             {
                 var b = register[0];
@@ -82,6 +87,16 @@ namespace ConsoleApp1
                  Console.Write(Convert.ToInt32(bit));
             }
             Console.WriteLine();
+        }
+
+        public static string SetStringOfBits(BitArray bitArray)
+        {
+            StringBuilder sb = new StringBuilder(bitArray.Length);
+            foreach (var bit in bitArray)
+            {
+                sb.Append(Convert.ToInt32(bit));
+            }
+            return sb.ToString();
         }
 
         public static void ParityBit(BitArray array, bool HVArray = false)
@@ -119,17 +134,6 @@ namespace ConsoleApp1
                 Console.WriteLine();
                 Console.WriteLine("- - - - - - - - - - - - -");
             }
-        }
-
-        public static void ConvertToString()
-        {
-            var sb = new StringBuilder();
-            for (int i = 0; i < register.Count; i++)
-            {
-                char c = register[i] ? '1' : '0';
-                sb.Append(c);
-            }
-            Console.WriteLine(sb.ToString());
         }
     }
 }

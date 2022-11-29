@@ -1,4 +1,5 @@
 ﻿using ControlSum;
+using Microsoft.Win32;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,20 +24,9 @@ namespace ConsoleApp1
 
         public static byte[] data;
 
-        public void SetPolynomFromFile()
-        {
-            string filePath = Directory.GetCurrentDirectory() + @"\Polynom.txt";
-            EncodingProvider provider = CodePagesEncodingProvider.Instance;
-            Encoding.RegisterProvider(provider);
-            string text = File.ReadAllText(filePath, Encoding.GetEncoding(1251));
-            Console.WriteLine(text);
-            data = Encoding.GetEncoding(866).GetBytes(text);
-            Array.Reverse(data);
-        }
-
             public void ReadF(ACTIONS action) {
             var fileInfo = new FileInfo("FileSource.txt");
-            int chunkSize = 9;
+            int chunkSize = 1;
             byte[] bytes = new byte[chunkSize];
             using (var stream = fileInfo.OpenRead())
             {
@@ -53,7 +43,6 @@ namespace ConsoleApp1
                     Array.Reverse(data);
                     bytesRead += count;
                     BitArray bitArray = new BitArray(data);
-                  //  Algorithms.Reverse(bitArray);
                     switch (action)
                     {
                         case ACTIONS.READ_FROM_FILE:
@@ -73,9 +62,12 @@ namespace ConsoleApp1
                             Algorithms.ParityBit(bitArray, true);
                             break;
                         case ACTIONS.CRC:
-                            Algorithms.MakeCRC(bitArray);
+                            Algorithms.MakeCRC(data);
                             Console.WriteLine("Контрольная сумма:");
-                            Algorithms.PrintArr(Algorithms.register);
+                            string res = Algorithms.SetStringOfBits(Algorithms.register);
+                            uint result = Convert.ToUInt32(res, 2);
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            Console.WriteLine("0x" + result.ToString("X4"));
                             break;
                     }
                 }

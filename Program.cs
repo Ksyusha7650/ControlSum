@@ -61,7 +61,6 @@ namespace ControlSum
                     case 5:
                         Console.WriteLine("Циклический избыточный контроль: ");
                         Console.WriteLine("Полином: ");
-                        r.SetPolynomFromFile();
                         r.ReadF(ReadFromFile.ACTIONS.CRC);
                         break;
                     case 6:
