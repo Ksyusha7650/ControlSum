@@ -31,8 +31,8 @@ namespace ConsoleApp1
             polynom = new BitArray(BitConverter.GetBytes(polynomHex));
             ClearFirstZeros(ref polynom);
             Reverse(polynom);
-           // register = new BitArray(BitConverter.GetBytes(registerHex));
-           // ClearFirstZeros(ref register);
+            register = new BitArray(BitConverter.GetBytes(registerHex));
+            ClearFirstZeros(ref register);
             toXorPolynom = new BitArray(BitConverter.GetBytes(toXorPolynomHex));
             ClearFirstZeros(ref toXorPolynom);
         }
