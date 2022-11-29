@@ -21,19 +21,7 @@ namespace ConsoleApp1
             CRC
         }
 
-        public static byte[] data, temp_data;
-
-        private static void GetMsgFromFile(bool isMsg = true)
-        {
-            string filePath = Directory.GetCurrentDirectory() + @"\FileSource.txt";
-            if (!isMsg) filePath = Directory.GetCurrentDirectory() + @"\Polynom.txt";
-            EncodingProvider provider = CodePagesEncodingProvider.Instance;
-            Encoding.RegisterProvider(provider);
-            string text = File.ReadAllText(filePath, Encoding.GetEncoding(1251));
-            Console.WriteLine(text);
-            data = Encoding.GetEncoding(866).GetBytes(text);
-            Array.Reverse(data);
-        }
+        public static byte[] data;
 
         public void SetPolynomFromFile()
         {
@@ -41,13 +29,10 @@ namespace ConsoleApp1
             EncodingProvider provider = CodePagesEncodingProvider.Instance;
             Encoding.RegisterProvider(provider);
             string text = File.ReadAllText(filePath, Encoding.GetEncoding(1251));
-            
             Console.WriteLine(text);
             data = Encoding.GetEncoding(866).GetBytes(text);
             Array.Reverse(data);
-            Algorithms.polynom = new BitArray(data);
         }
-
 
             public void ReadF(ACTIONS action) {
             var fileInfo = new FileInfo("FileSource.txt");
@@ -63,12 +48,12 @@ namespace ConsoleApp1
                     int count = stream.Read(bytes, 0, bytes.Length);
                     EncodingProvider provider = CodePagesEncodingProvider.Instance;
                     Encoding.RegisterProvider(provider);
-                    Encoding.Convert(Encoding.Default, Encoding.ASCII, bytes);
                     data = bytes;
+                    if (action != ACTIONS.READ_FROM_FILE)
                     Array.Reverse(data);
                     bytesRead += count;
                     BitArray bitArray = new BitArray(data);
-                    Algorithms.Reverse(bitArray);
+                  //  Algorithms.Reverse(bitArray);
                     switch (action)
                     {
                         case ACTIONS.READ_FROM_FILE:
