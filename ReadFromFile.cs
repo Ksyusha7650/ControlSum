@@ -26,7 +26,7 @@ namespace ConsoleApp1
 
             public void ReadF(ACTIONS action) {
             var fileInfo = new FileInfo("FileSource.txt");
-            int chunkSize = 1;
+            int chunkSize = 9;
             byte[] bytes = new byte[chunkSize];
             using (var stream = fileInfo.OpenRead())
             {
@@ -67,7 +67,8 @@ namespace ConsoleApp1
                             string res = Algorithms.SetStringOfBits(Algorithms.register);
                             uint result = Convert.ToUInt32(res, 2);
                             Console.ForegroundColor = ConsoleColor.Blue;
-                            Console.WriteLine("0x" + result.ToString("X4"));
+                            Algorithms.PrintUint(result);
+                            
                             break;
                     }
                 }

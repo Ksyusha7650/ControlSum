@@ -61,10 +61,16 @@ namespace ControlSum
                     case 5:
                         Console.WriteLine("Циклический избыточный контроль: ");
                         Console.WriteLine("Полином: ");
+                        Algorithms.PrintUint(Algorithms.polynomHex);
+                        Console.WriteLine("Значение регистра: ");
+                        Algorithms.PrintUint(Algorithms.registerHex);
+                        Console.WriteLine("Полином 2: ");
+                        Algorithms.PrintUint(Algorithms.toXorPolynomHex);
                         r.ReadF(ReadFromFile.ACTIONS.CRC);
                         break;
                     case 6:
                         exit = true;
+                        Console.WriteLine("До свидания!");
                         break;
                     default: Console.WriteLine("Неверный ввод");
                         break;

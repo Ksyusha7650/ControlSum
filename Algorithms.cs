@@ -11,17 +11,16 @@ namespace ConsoleApp1
 {
     public class Algorithms
     {
-        const int DEGREE = 30;
+        const int DEGREE = 15;
         public static BitArray bitArrayCRC,
             register = new BitArray(DEGREE), polynom = new BitArray(DEGREE), toXorPolynom = new BitArray(DEGREE);
-        private const uint polynomHex = 0x2030B9C7, registerHex = 0x3FFFFFFF, toXorPolynomHex = 0x3FFFFFFF;
+        public const uint polynomHex = 0x6815, registerHex = 0x0000, toXorPolynomHex = 0x0001;
         public static BitArray bitArray;
         static int[] sumVertical;
 
         private static void SetSizeToBitArray()
         {
             Reverse(bitArray);
-            ClearFirstZeros(ref bitArray);
             bitArrayCRC = new BitArray(DEGREE + bitArray.Length);
             for (int i = 0; i < bitArray.Length; i++)
             {
@@ -30,10 +29,15 @@ namespace ConsoleApp1
             polynom = new BitArray(BitConverter.GetBytes(polynomHex));
             ClearFirstZeros(ref polynom);
             Reverse(polynom);
-            register = new BitArray(BitConverter.GetBytes(registerHex));
-            ClearFirstZeros(ref register);
+            register = new BitArray(DEGREE);
             toXorPolynom = new BitArray(BitConverter.GetBytes(toXorPolynomHex));
-            ClearFirstZeros(ref toXorPolynom);
+            toXorPolynom.Length = DEGREE;
+            Reverse(toXorPolynom);
+        }
+
+        public static void PrintUint(uint number)
+        {
+            Console.WriteLine("0x" + number.ToString("X"));
         }
 
         private static void ClearFirstZeros(ref BitArray bitArray)
@@ -48,12 +52,6 @@ namespace ConsoleApp1
         {
             bitArray = new BitArray(bytes);
             SetSizeToBitArray();
-            BitArray temp = new BitArray(bytes);
-            Reverse(temp);
-            temp.Length = DEGREE;
-            register = register.Xor(temp);
-            bitArrayCRC.RightShift(DEGREE);
-            bitArrayCRC.Length -= DEGREE;
             foreach (var bit in bitArrayCRC)
             {
                 var b = register[0];
@@ -62,9 +60,6 @@ namespace ConsoleApp1
                 if (b == true) register = register.Xor(polynom);
             }
             register = register.Xor(toXorPolynom);
-            Reverse(register);
-            ClearFirstZeros(ref register);
-            Reverse(register);
         }
 
         public static void Reverse(BitArray array)
