@@ -11,10 +11,10 @@ namespace ConsoleApp1
 {
     public class Algorithms
     {
-        const int DEGREE = 15;
+        const int DEGREE = 11;
         public static BitArray bitArrayCRC,
             register = new BitArray(DEGREE), polynom = new BitArray(DEGREE), toXorPolynom = new BitArray(DEGREE);
-        public const uint polynomHex = 0x6815, registerHex = 0x0000, toXorPolynomHex = 0x0001;
+        public const uint polynomHex = 0x385, registerHex = 0x01A, toXorPolynomHex = 0x000;
         public static BitArray bitArray;
         static int[] sumVertical;
 
@@ -28,11 +28,11 @@ namespace ConsoleApp1
             }
             polynom = new BitArray(BitConverter.GetBytes(polynomHex));
             ClearFirstZeros(ref polynom);
+            polynom.Length = DEGREE;
             Reverse(polynom);
-            register = new BitArray(DEGREE);
-            toXorPolynom = new BitArray(BitConverter.GetBytes(toXorPolynomHex));
-            toXorPolynom.Length = DEGREE;
-            Reverse(toXorPolynom);
+            register = new BitArray(BitConverter.GetBytes(registerHex));
+            register.Length = DEGREE;
+            Reverse(register);
         }
 
         public static void PrintUint(uint number)
@@ -44,7 +44,7 @@ namespace ConsoleApp1
         {
             while (bitArray[bitArray.Length - 1] == false)
             {
-                bitArray.Length -= 1;
+                bitArray.Length--;
             }
         }
 
@@ -52,6 +52,12 @@ namespace ConsoleApp1
         {
             bitArray = new BitArray(bytes);
             SetSizeToBitArray();
+            BitArray temp = new BitArray(bytes);
+            Reverse(temp);
+            temp.Length = DEGREE;
+            register = register.Xor(temp);
+            bitArrayCRC.RightShift(DEGREE);
+            bitArrayCRC.Length -= DEGREE;
             foreach (var bit in bitArrayCRC)
             {
                 var b = register[0];
@@ -59,7 +65,6 @@ namespace ConsoleApp1
                 register[DEGREE - 1] = (bool)bit;
                 if (b == true) register = register.Xor(polynom);
             }
-            register = register.Xor(toXorPolynom);
         }
 
         public static void Reverse(BitArray array)
@@ -79,7 +84,7 @@ namespace ConsoleApp1
             Console.ForegroundColor = ConsoleColor.Blue;
             foreach (var bit in bitArray)
             {
-                 Console.Write(Convert.ToInt32(bit));
+                Console.Write(Convert.ToInt32(bit));
             }
             Console.WriteLine();
         }
